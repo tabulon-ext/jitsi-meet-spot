@@ -10,8 +10,6 @@
         "code": "Pairing Code",
         "devices": "Preferred devices",
         "display": "Display",
-        "fixedSegment": "Fixed pairing code segment",
-        "fixedSegmentPlaceholder": "Example: AB",
         "reset": "Reset app",
         "resetting": "Resetting",
         "save": "Save",
@@ -38,7 +36,7 @@
         "pleaseWait": "Please wait",
         "reconnecting": "Reconnecting",
         "setup": "Currently in setup.",
-        "tvConflict": "An instance of {{ roomName }} is already open. Please close all other instances and try again.",
+        "tvConflict": "An instance of this room is already open. Please close all other instances.",
         "tvNotSupported": "Hosting {{ productName }} is not supported on the current browser.",
         "unexpectedError": "An unexpected error occurred.",
         "useChrome": "Please open {{ productName }} on Chrome desktop.",
@@ -89,8 +87,8 @@
         "waitingForStart": "Currently waiting for the conference to start."
     },
     "countdown": {
-        "timeLeft": "{{ count }} second",
-        "timeLeft_plural": "{{ count }} seconds"
+        "timeLeft_one": "{{ count }} second",
+        "timeLeft_other": "{{ count }} seconds"
     },
     "dial": {
         "dial": "Dial a number",
@@ -104,6 +102,10 @@
         "rate": "Rate your experience",
         "thanks": "Thanks for using {{ productName }}!"
     },
+    "hangup": {
+        "confirmation" : "Are you sure you want to hang up?",
+        "button": "Hang up"
+    },
     "help": {
         "howToConnect": "Open {{ url }} in a desktop Google Chrome browser in the conference room to set it up and obtain a share key. Next enter the {{ codeLength }}-character share key in this app.",
         "isRemote": "This app is a remote controller for a conference room."
@@ -111,6 +113,12 @@
     "join": {
         "enterCode": "Enter a share key",
         "visibleAt": "Your key is visible on the {{ productName }} TV"
+    },
+    "recording": {
+        "understand": "I understand, keep me muted for now",
+        "understandAndUnmute": "I understand, please unmute me",
+        "inProgressTitle": "Recording in progress",
+        "inProgressDescription": "This meeting is being recorded and analyzed by AI. Your audio and video have been muted. If you choose to unmute, you consent to being recorded."
     },
     "screenshare": {
         "alreadyActive": "Cannot start wireless screenshare while screenshare is active.",
@@ -140,7 +148,6 @@
         "audioOut": "Speaker",
         "audioOutTest": "Play test sound",
         "autoSyncing": "Auto syncing is in progress...",
-        "avatar": "Enter an avatar url",
         "devices": "Setup your devices",
         "enterCode": "Enter your pairing code and start your setup",
         "enterName": "Enter an email or room name (case-sensitive)",
@@ -152,6 +159,11 @@
         "pairAsk": "Would you like to pair a permanent remote control with this room?",
         "preview": "Preview",
         "profile": "Room settings",
+        "resolutionDefault": "Default",
+        "resolutionLabel": "Preferred resolution",
+        "resolutionHighDef": "HD",
+        "resolutionFullHighDef": "Full HD",
+        "resolutionUltraHighDef": "4K",
         "roomByEmail": "Enter an email:",
         "roomSelect": "Select A Room",
         "screenShare": "Screen share",

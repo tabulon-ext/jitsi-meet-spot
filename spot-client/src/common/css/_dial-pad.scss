@@ -1,5 +1,9 @@
+@use "media-queries";
+@use "mixins";
+@use "variables";
+
 .dial-pad {
-    @include centered-content;
+    @include mixins.centered-content;
 
     border-radius: 4px;
     flex-direction: column;
@@ -27,10 +31,67 @@
         padding: 0;
         width: 72px;
 
+        @media #{media-queries.$mqh-xxsmall} {
+            height: 50px;
+            margin: 4px 6px;
+            width: 50px;
+        }
+
+        @media #{media-queries.$mqh-mobile-s} {
+            height: 65px;
+            margin: 8px 12px;
+            width: 65px;
+        }
+
+        @media #{media-queries.$mqh-laptop} {
+            height: 80px;
+            width: 80px;
+        }
+
+        @media #{media-queries.$mqh-mobile-l} {
+            height: 90px;
+            width: 90px;
+        }
+
+        @media #{media-queries.$mqh-tablet} {
+            height: 100px;
+            width: 100px;
+        }
+
+        @media #{media-queries.$mqh-laptop-l} {
+            height: 120px;
+            width: 120px;
+        }
+
+        @media #{media-queries.$mqh-4k} {
+            width: 200px;
+            height: 200px;
+        }
+
         .main {
             display: block;
             font-size: 32px;
             font-weight: 600;
+
+            @media #{media-queries.$mqh-xxsmall} {
+                font-size: 22px;
+                line-height: 20px;
+            }
+
+            @media #{media-queries.$mqh-mobile-s} {
+                font-size: 32px;
+                line-height: 32px;
+            }
+    
+            @media #{media-queries.$mqh-laptop-l} {
+                font-size: 45px;
+                line-height: 45px;
+            }
+    
+            @media #{media-queries.$mqh-4k} {
+                font-size: 65px;
+                line-height: 65px;
+            }      
         }
 
         .sub {
@@ -38,6 +99,25 @@
             font-size: 10px;
             font-weight: bold;
             line-height: 14px;
+
+            @media #{media-queries.$mqh-xxsmall} {
+                line-height: 8px;
+            }
+
+            @media #{media-queries.$mqh-mobile-s} {
+                font-size: 10px;
+                line-height: 14px;
+            }
+
+            @media #{media-queries.$mqh-laptop-l} {
+                font-size: 20px;
+                line-height: 18px;
+            }
+    
+            @media #{media-queries.$mqh-4k} {
+                font-size: 25px;
+                line-height: 20px;
+            }  
         }
 
         .sub:empty:before {
@@ -51,7 +131,7 @@
 
         &.active,
         &:active {
-            @include active;
+            @include mixins.active;
         }
 
         &.disabled {
@@ -70,12 +150,12 @@
         }
 
         .backspace {
-            @include button-reset;
+            @include mixins.button-reset;
 
             border: 0;
 
             &:active {
-                @include active;
+                @include mixins.active;
             }
         }
     }
@@ -90,7 +170,7 @@
     }
 
     .dialing-dots {
-        font-size: $font-size-x-large;
+        font-size: variables.$font-size-x-large;
     }
 
     .dial-pad-entered-number {
@@ -105,11 +185,21 @@
         margin: 8px 0px 16px;
 
         input {
-            @include input-reset;
+            @include mixins.input-reset;
             color: white;
             font-size: 32px;
             line-height: 44px;
             text-align: center;
+
+            @media #{media-queries.$mqh-xxsmall} {
+                font-size: 22px;
+                line-height: 34px;
+            }
+
+            @media #{media-queries.$mqh-mobile-l} {
+                font-size: 32px;
+                line-height: 44px;
+            }
         }
 
         input::placeholder {
@@ -196,7 +286,7 @@
             }
 
             input {
-                @include input-reset;
+                @include mixins.input-reset;
 
                 &::placeholder {
                     color: #A4B8D1;
@@ -214,17 +304,25 @@
     }
 
     .country-search-trigger {
-        @include button-reset;
+        @include mixins.button-reset;
 
         align-items: center;
         border: 1px solid rgba(255, 255, 255, 0.25);
         color: white;
         display: flex;
-        font-size: 13px;
+        font-size: 25px;
         padding: 4px 8px;
 
         .country-search-trigger-name {
             margin: 0 6px;
+        }
+
+        @media #{media-queries.$mqh-xxsmall} {
+            font-size: 20px;
+        }
+
+        @media #{media-queries.$mqh-mobile-l} {
+            font-size: 25px;
         }
     }
 }

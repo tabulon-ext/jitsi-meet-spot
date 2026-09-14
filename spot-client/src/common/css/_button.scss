@@ -1,8 +1,11 @@
+@use "media-queries";
+@use "variables";
+
 .button {
     border-radius: 5px;
     color: white;
     cursor: pointer;
-    font-size: $font-size-small;
+    font-size: variables.$font-size-small;
     padding: 8px 32px;
 
     &:focus {
@@ -16,6 +19,7 @@
     &.primary {
         background-color: var(--button-color);
         border: 1px solid var(--button-color);
+        text-transform: unset;
 
         &:hover {
             background-color: var(--button-active-color);
@@ -34,9 +38,11 @@
     &.subtle {
         border: 1px solid white;
         color: white;
+        text-transform: unset;
 
         &:hover {
             background-color: var(--container-content-highlight-bg-color);
+            border: 1px solid white;
         }
     }
 
@@ -57,7 +63,7 @@
         font-size: 1em;
         height: 36px;
 
-        @media #{$mq-tablet} {
+        @media #{media-queries.$mqw-tablet} {
             height: 48px;
         }
     }
@@ -70,7 +76,7 @@
         border: 1px solid white;
         font-size: 48px;
         padding: 0;
-    
+
         svg {
             font-size: 48px;
             fill: white;

@@ -1,15 +1,15 @@
-/* global __dirname, process */
-
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const { DuplicatesPlugin } = require('inspectpack/plugin');
-const WriteFilePlugin = require('write-file-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
+const { DuplicatesPlugin } = require('inspectpack/plugin');
 const path = require('path');
 const webpack = require('webpack');
+const WriteFilePlugin = require('write-file-webpack-plugin');
 
 module.exports = () => {
     const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development';
+    const isProduction = mode === 'production';
+    const detectCircularDeps = Boolean(process.env.DETECT_CIRCULAR_DEPS);
 
     return {
         devServer: {
@@ -18,28 +18,34 @@ module.exports = () => {
             host: '0.0.0.0',
             port: 8000,
             static: {
-                directory: path.join(__dirname, '/'),
+                directory: path.join(__dirname, '/')
             },
             devMiddleware: {
-                publicPath: '/dist/',
+                publicPath: '/dist/'
             },
+            client: {
+                overlay: false
+            }
         },
-        devtool: 'source-map',
+        devtool: isProduction ? 'source-map' : 'eval-source-map',
         entry: {
-            app: './src/index.js',
+            app: './src/index'
         },
         mode,
         module: {
             rules: [
                 {
-                    enforce: 'pre',
-                    exclude: /(node_modules)/,
-                    loader: 'eslint-loader',
-                    test: /\.js$/,
+                    // MUI 9 ships native ESM (.mjs) that uses extensionless subpath imports
+                    // (e.g. `react-transition-group/TransitionGroupContext`). webpack 5 otherwise
+                    // requires fully-specified requests inside ESM; relax that so they resolve.
+                    test: /\.m?js$/,
+                    resolve: {
+                        fullySpecified: false
+                    }
                 },
                 {
                     test: /\.(css|scss)$/,
-                    use: ['style-loader', 'css-loader', 'sass-loader'],
+                    use: [ 'style-loader', 'css-loader', 'sass-loader' ]
                 },
                 {
                     test: /\.(svg|ttf|eot|woff)$/,
@@ -47,49 +53,54 @@ module.exports = () => {
                 },
                 {
                     loader: 'babel-loader',
-                    options: {
-                        plugins: [
-                            require.resolve('@babel/plugin-proposal-nullish-coalescing-operator'),
-                            require.resolve('@babel/plugin-proposal-optional-chaining'),
-                        ],
-                    },
-                    test: /\.js$/,
-                },
-            ],
+                    exclude: /node_modules/,
+                    test: /\.[jt]sx?$/
+                }
+            ]
         },
         plugins: [
-            new CircularDependencyPlugin({
-                exclude: /node_modules/,
-                failOnError: true,
-            }),
+            detectCircularDeps
+                && new CircularDependencyPlugin({
+                    exclude: /node_modules/,
+                    failOnError: true
+                }),
             new CopyWebpackPlugin({
                 patterns: [
                     {
                         from: './static',
-                        to: '.',
+                        to: '.'
                     },
                     {
                         from: './config.js',
-                        to: './config',
-                    },
-                ],
+                        to: './config'
+                    }
+                ]
             }),
             new webpack.DefinePlugin({
-                'process.env.NODE_ENV': JSON.stringify(mode),
+                'process.env.NODE_ENV': JSON.stringify(mode)
             }),
             new Dotenv({
-                systemvars: true, // Respect existing environment variables
+                systemvars: true // Respect existing environment variables
             }),
             new DuplicatesPlugin({
-                emitErrors: true,
+                emitErrors: true
             }),
-            new WriteFilePlugin(),
-        ],
+            new WriteFilePlugin()
+        ].filter(Boolean),
         output: {
-            path: path.resolve(__dirname, 'dist'),
+            path: path.resolve(__dirname, 'dist')
+        },
+        optimization: {
+            concatenateModules: isProduction,
+            minimize: isProduction
         },
         resolve: {
-            modules: [path.resolve('./src'), path.resolve('./node_modules')],
-        },
+            extensions: [ '.tsx', '.ts', '.jsx', '.js', '.json' ],
+
+            // `path.resolve('./src')` enables absolute imports (common/..., spot-tv/..., spot-remote/...);
+            // the bare 'node_modules' (not an absolute path) keeps webpack's standard upward lookup so
+            // workspace-hoisted deps in the monorepo root node_modules are found.
+            modules: [ path.resolve('./src'), 'node_modules' ]
+        }
     };
 };

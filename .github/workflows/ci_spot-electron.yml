@@ -1,0 +1,61 @@
+name: 'CI - spot-electron'
+on: [pull_request]
+
+# Unit tests / lint / typecheck for spot-electron run in the main `CI` workflow
+# (root `npm run test` / `lint` / `typecheck`). This workflow only does the
+# platform-specific packaging (electron-builder) which must run on mac/windows.
+# The packaged installers are uploaded as artifacts so a PR's output can be downloaded and tested.
+jobs:
+    build-spot-electron-mac:
+        name: Build on macOS
+        runs-on: macos-15
+
+        steps:
+            - name: Step 1 - checkout
+              uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+
+            - name: Step 2 - setup node
+              uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # v4
+              with:
+                node-version-file: '.nvmrc'
+
+            - name: Step 3 - install (workspaces)
+              run: npm ci
+
+            - name: Step 4 - build
+              run: npm run dist --workspace spot-electron
+
+            - name: Step 5 - upload installer
+              uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+              with:
+                name: spot-electron-macos
+                path: spot-electron/release/*.dmg
+                if-no-files-found: error
+                retention-days: 14
+
+    build-spot-electron-windows:
+        name: Build on Windows
+        runs-on: windows-latest
+
+        steps:
+            - name: Step 1 - checkout
+              uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+
+            - name: Step 2 - setup node
+              uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # v4
+              with:
+                node-version-file: '.nvmrc'
+
+            - name: Step 3 - install (workspaces)
+              run: npm ci
+
+            - name: Step 4 - build
+              run: npm run dist --workspace spot-electron
+
+            - name: Step 5 - upload installer
+              uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+              with:
+                name: spot-electron-windows
+                path: spot-electron/release/*.exe
+                if-no-files-found: error
+                retention-days: 14
